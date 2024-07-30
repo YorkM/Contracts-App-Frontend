@@ -1,11 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+
+// import { RegisterPage } from './auth/RegisterPage';
+// import { LoginPage } from './auth/LoginPage';
+import { ContractsApp } from './ContractsApp';
 
 import './index.css';
-import { ContractsApp } from './ContractsApp';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ContractsApp />
+    <BrowserRouter>
+      <ContractsApp />
+    </BrowserRouter>
   </React.StrictMode>,
 )
