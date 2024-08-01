@@ -1,10 +1,9 @@
-import { InfoTable } from "./InfoTable"
-import { Navbar } from "./Navbar"
+import { ContractsModal } from './ContractsModal';
+import { InfoTable, Navbar } from '../components';
 
 export const MainInfo = () => {
     return (
-        <>
-        
+        <>        
             <Navbar />
 
             <div className="container mx-auto">
@@ -12,7 +11,8 @@ export const MainInfo = () => {
                     <InfoTable />
                 </div>
             </div>
-        
+
+            <ContractsModal />        
         </>
     )
 }

@@ -2,8 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
-// import { RegisterPage } from './auth/RegisterPage';
-// import { LoginPage } from './auth/LoginPage';
 import { ContractsApp } from './ContractsApp';
 
 import './index.css';

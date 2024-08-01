@@ -1,5 +1,6 @@
 import { MdOutlineEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
+import { Link } from "react-router-dom";
 
 
 export const LoginPage = () => {
@@ -39,7 +40,7 @@ export const LoginPage = () => {
                         />
                     </div>
                 </form>
-                <p className="text-right m-10 text-blue-300">¿No tienes una cuenta? <a className="text-white" href="">Crea una!</a></p>
+                <p className="text-right m-10 text-blue-300">¿No tienes una cuenta? <Link className="text-white" to="/register">Crea una!</Link></p>
             </div>
         </div>
     )

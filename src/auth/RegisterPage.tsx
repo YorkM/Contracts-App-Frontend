@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 
 
@@ -50,7 +51,7 @@ export const RegisterPage = () => {
                         />
                     </div>
                 </form>
-                <p className="text-right m-10 text-blue-300">Ir al <a className="text-white" href="">Inicio de sesión</a></p>
+                <p className="text-right m-10 text-blue-300">Ir al <Link className="text-white" to="/login">Inicio de sesión</Link></p>
             </div>
         </div>
     )

@@ -1,5 +1,5 @@
-import { BiLogOut } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import { BiLogOut } from "react-icons/bi";
 
 export const Navbar = () => {
 
