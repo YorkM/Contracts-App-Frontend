@@ -12,7 +12,7 @@ export const RegisterPage = () => {
 
     return (
         <div className="h-screen bg-blue-900 flex flex-col items-center">
-            <div className="w-3/4 min-h-72 bg-blue-700 m-auto rounded-md shadow-sm shadow-slate-100">
+            <div className="w-3/4 min-h-72 bg-blue-700 m-auto rounded-md shadow-sm shadow-slate-100 md:w-1/2">
                 <h2 className="text-center mt-2 text-white text-3xl tracking-wide font-black">REALIZAR REGISTRO</h2>
                 <form onSubmit={ onsSubmit }>
                     <div className="flex justify-center items-center mt-5">

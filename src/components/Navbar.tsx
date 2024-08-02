@@ -12,7 +12,7 @@ export const Navbar = () => {
     }
 
     return (
-        <nav className="bg-blue-950 min-h-20 flex justify-evenly items-center">
+        <nav className="w-full bg-blue-950 min-h-20 flex justify-evenly items-center">
             <h1 className="text-blue-400 text-3xl">Contracts</h1>
             <ul className="flex gap-6">
                 <li className="text-cyan-600 hover:text-cyan-300 text-lg">Contratos</li>

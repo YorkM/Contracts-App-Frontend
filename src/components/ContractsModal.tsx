@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DatePicker,{ registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import{ es} from 'date-fns/locale/es';
@@ -8,6 +8,8 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 
 import { addHours, differenceInSeconds } from 'date-fns';
 import Modal from 'react-modal';
+import { useUiSlice } from '../hooks/useUiSlice';
+import { useContractsStore } from '../hooks/useContractsStore';
 
 registerLocale('es', es);
 
@@ -23,8 +25,9 @@ export const ContractsModal = () => {
             transform: 'translate(-50%, -50%)',
         },
     };
-    
-    const [isOpen, setIsOpen] = useState(true);
+
+    const { isDateModal, closeModal } = useUiSlice();
+    const { activeContract, startSavingContract } = useContractsStore();   
     
     const [formState, setFormState] = useState({
         programa: '',
@@ -49,43 +52,49 @@ export const ContractsModal = () => {
         })
     }
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const onSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const diferenciaFechas = differenceInSeconds(formState.fechaTerminacion, formState.fechaInicio);
         if (isNaN(diferenciaFechas) || diferenciaFechas <= 0) {
-            Swal.fire('Error en fechas', 'Revisar las fechas ingresadas', 'error');
+            Swal.fire('Fechas Incorrectas', 'Revisar las fechas ingresadas', 'error');
+            return;
         }
 
         const { programa, numeroContrato, nombreProveedor, tipoContrato } = formState;
 
         if (programa.length == 0 || numeroContrato.length == 0 ||  nombreProveedor.length == 0 || tipoContrato.length == 0) {
             Swal.fire('Formulario Inválido', 'Todos los campos del formulario son obligatorios', 'error');
+            return;
         }
 
-        //onCloseModal();
+        await startSavingContract(formState);
+        closeModal();
     }
 
-    const onCloseModal = () => {
-        setIsOpen(false);
-    }
+    useEffect(() => {
+        if (activeContract !== null) {
+            setFormState({...activeContract});
+        } 
+    }, [ activeContract ]);    
 
     Modal.setAppElement('#root');
 
     return (
         <Modal
-            isOpen={isOpen}
-            onRequestClose={onCloseModal}
+            isOpen={ isDateModal }
+            onRequestClose={ closeModal }
             style={customStyles}
-            className="modal w-1/2"
+            className="modal w-1/2 mt-96"
             overlayClassName="modal-fondo"
             closeTimeoutMS={200}
         >
             <h2 className='text-center text-blue-900 text-3xl font-black'>Nuevo contrato</h2>
             <form onSubmit={ onSubmit }>
-                <div className="flex mt-2  justify-center items-center">
+                <div className="flex mt-2 flex-col">
+                    <label className='pl-2 font-black' htmlFor="programa">Programa</label>
                     <input
-                        className="w-full rounded-sm placeholder:pl-2 placeholder:text-xs px-3 py-1 outline-none border"
+                        className="w-full rounded-sm placeholder:pl-2 placeholder:text-base px-3 py-1 outline-none border"
                         type="text"
                         placeholder="Programa"
                         name='programa'
@@ -93,9 +102,10 @@ export const ContractsModal = () => {
                         onChange={ onInputChange }
                     />
                 </div>
-                <div className="flex mt-2 justify-center items-center">
+                <div className="flex flex-col mt-2">
+                    <label className='pl-2 font-black' htmlFor="numeroContrato">Número de contrato</label>
                     <input
-                        className="w-full rounded-sm placeholder:pl-2 placeholder:text-xs px-3 py-1 outline-none border"
+                        className="w-full rounded-sm placeholder:pl-2 placeholder:text-base px-3 py-1 outline-none border"
                         type="text"
                         placeholder="Número de contrato"
                         name='numeroContrato'
@@ -103,9 +113,10 @@ export const ContractsModal = () => {
                         onChange={ onInputChange }
                     />
                 </div>
-                <div className="flex mt-2 justify-center items-center">
+                <div className="flex flex-col mt-2">
+                    <label className='pl-2 font-black' htmlFor="nombreProveedor">Nombre del Proveedor</label>
                     <input
-                        className="w-full rounded-sm placeholder:pl-2 placeholder:text-xs px-3 py-1 outline-none border"
+                        className="w-full rounded-sm placeholder:pl-2 placeholder:text-base px-3 py-1 outline-none border"
                         type="text"
                         placeholder="Nombre del proveedor"
                         name='nombreProveedor'
@@ -113,9 +124,10 @@ export const ContractsModal = () => {
                         onChange={ onInputChange }
                     />
                 </div>
-                <div className="flex mt-2 justify-center items-center">
+                <div className="flex flex-col mt-2">
+                    <label className='pl-2 font-black' htmlFor="tipoContrato">Tipo de contrato</label>
                     <input
-                        className="w-full rounded-sm placeholder:pl-2 placeholder:text-xs px-3 py-1 outline-none border"
+                        className="w-full rounded-sm placeholder:pl-2 placeholder:text-base px-3 py-1 outline-none border"
                         type="text"
                         placeholder="Tipo de contrato"
                         name='tipoContrato'
@@ -123,7 +135,8 @@ export const ContractsModal = () => {
                         onChange={ onInputChange }
                     />
                 </div>
-                <div className="flex mt-2 justify-center items-center">
+                <div className="flex flex-col mt-2">
+                    <label className='pl-2 font-black' htmlFor="fechaInicio">Fecha de inicio</label>
                     <DatePicker
                         className="rounded-sm placeholder:pl-2 placeholder:text-xs px-3 py-1 outline-none border"
                         name='fechaInicio'
@@ -133,11 +146,13 @@ export const ContractsModal = () => {
                         showTimeSelect
                         locale={ es }
                         timeCaption='Hora'
+                        
                     />
                 </div>
-                <div className="flex mt-2 justify-center items-center">
+                <div className="flex flex-col mt-2">
+                    <label className='pl-2 font-black' htmlFor="fechaTerminacion">Fecha de terminación</label>
                     <DatePicker
-                    minDate={ formState.fechaInicio }
+                        minDate={ formState.fechaInicio }
                         className="w-full rounded-sm placeholder:pl-2 placeholder:text-xs px-3 py-1 outline-none border"
                         name='fechaTerminacion'
                         onChange={ (event) => onDateChange(event, 'fechaTerminacion') }
